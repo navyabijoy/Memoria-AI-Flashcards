@@ -13,7 +13,8 @@ const systemPrompt = `You are a flashcard creator. Your task is to generate conc
 8. Adapt to User Needs: Tailor the difficulty level and content of the flashcards to the specific knowledge level and learning goals of the user.
 9. Keep It Visual: Where applicable, incorporate visual aids like diagrams, charts, or images to enhance understanding and retention.
 10. Only generate 10 flashcards.
-Return in the following JSON format:
+
+IMPORTANT: Return ONLY a pure JSON object with no additional formatting, markdown, or code block syntax. The response should start with { and end with } and follow this exact format:
 {
     "flashcards": [{
         "front": str,
@@ -30,7 +31,7 @@ export async function POST(req) {
                 { role: 'system', content: systemPrompt },
                 { role: 'user', content: data },
             ],
-            model: 'qwen/qwen-2-7b-instruct:free', 
+            model: 'qwen/qwen2.5-vl-72b-instruct:free', 
         }, {
             headers: {
                 'Authorization': `Bearer ${process.env.OPENROUTER_API_KEY}`, 
@@ -39,6 +40,9 @@ export async function POST(req) {
         });
 
         const flashcards = response.data.choices[0].message.content; 
+
+        console.log(flashcards)
+
         return NextResponse.json({ flashcards }); 
     } catch (error) {
         console.error('Error generating flashcards:', error);
