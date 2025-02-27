@@ -24,7 +24,6 @@ IMPORTANT: Return ONLY a pure JSON object with no additional formatting, markdow
 
 export async function POST(req) {
     const data = await req.text();
-
     try {
         const response = await axios.post('https://openrouter.ai/api/v1/chat/completions', {
             messages: [
@@ -39,8 +38,7 @@ export async function POST(req) {
             },
         });
 
-        const flashcards = response.data.choices[0].message.content; 
-
+        const flashcards = response.data.choices[0].message.content;
         console.log(flashcards)
 
         return NextResponse.json({ flashcards }); 
